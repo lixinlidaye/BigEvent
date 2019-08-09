@@ -201,7 +201,7 @@
 
 
     <!-- 自己的逻辑 -->
-    <script>
+    <!-- <script>
       /*
         功能分析：
           - 1 用户退出登录
@@ -252,7 +252,57 @@
       
 
     
-    </script>
+    </script> -->
     
+
+    <script>
+    
+        /*
+        功能分析 
+            - 用户退出登录
+                - 获取方式$('.user_center_link>a').eq(1)
+                - 请求接口,告诉服务端我退出了
+                    -  可以通过模态框设置一个确认操作' 
+                      - 退出成功,跳转到登陆页面
+                      - 如果点击取消,不进行跳转
+
+        -  用户头像和名称展示
+            - 请求接口，获取用户昵称和头像，放置在对应位置展示即可
+
+        
+        */
+
+        $('.user_center_link>a').eq(1).on('click', function () {
+
+            $('#myModal').modal();
+        });
+
+        $('.btn-leave').on('click',function () {
+
+            //  发送请求 :
+            $.post({
+                url : 'https://autumnfish.cn/big/admin/logout',
+                success : function (res) {
+                    location.href = 'login.html'
+                }
+            })
+        })
+      
+    
+        // 请求数据
+        $.get({
+            url : 'https://autumnfish.cn/big/admin/getuser',
+            success : function (res) {
+                if (res.code === 200) {
+                    // 将图片设置给两个展示区域
+                    $('.user_info img , .user_center_link img').css('src', res.data.user_pic);
+                    $('.user_info i').text(res.data.nickname);
+                };
+            }
+        });
+    
+    
+    </script>
+
   </body>
 </html>
