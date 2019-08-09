@@ -32,25 +32,28 @@
         </form>
       </div>
     </div>
+
+
     <!-- bootstarp的弹出框 -->
     <!-- Modal -->
+
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">提示!!!</h4>
-            </div>
-            <div class="modal-body">
-              <!-- 这里用来放置模态框的内容 -->
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            </div>
-          </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">提示!!!</h4>
         </div>
-      </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+        </div>
+    </div>
+    </div>
+
 
 
 
@@ -62,7 +65,7 @@
 <script src="./js/jquery-1.12.4.min.js"></script>
 <!-- 导入bs的js -->
 <script src="./js/bootstrap/js/bootstrap.min.js"></script>
-<script>
+<!-- <script>
   /*
     功能分析：
       1 对输入框的内容进行检测，不能为空，如果为空进行提示
@@ -104,6 +107,57 @@
       }
     });
   });
+
+
+</script> -->
+
+
+
+
+<script>
+
+    /*
+    
+       功能分析
+            -  对输入框的内容进行检测,不能为空,如果为空进行提示
+            -  将用户名和密码发送给接口进行测试
+                -  登陆成功 (admin和123456),跳转到index.html
+                -  登陆失败,提示用户 
+    
+    */
+
+    $('.input_sub').on('click', function (e) {
+        // 阻止默认的提交
+        e.preventDefault();
+
+        // 检测内容是否为空(失效检测)
+        if ($('.input_txt').val() === '' || $('.input_pass').val() === '') {
+            // alert('用户名密码,,不能为空');
+            // 通过设置的模态框将提示信息展示
+            $('.modal-body').text('内容没有填写完毕');
+            $('#myModal').modal();
+            return;
+        }
+
+        // 将用户名和密码提交给接口
+        $.post({
+            url : ' https://autumnfish.cn/big/admin/login',
+            data : {
+                user_name : $('.input_txt').val(),
+                password : $('.input_pass').val()
+            },
+            success : function (res) {
+                if (res.code === 200) {
+                    location.href = 'index.html';
+                } else if (res.code === 400) {
+                    // alert('用户名或密码错误');
+                    $('.modal-body').text('用户名或密码错误');
+                    $('#myModal').modal();
+                }
+            }
+        });
+
+    });
 
 
 </script>
